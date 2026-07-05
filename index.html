@@ -875,23 +875,23 @@
           <div class="hero-copy">
             <span class="eyebrow" id="heroPhase">Bugünün fazı</span>
             <h2 id="heroTitle">Günün ritmini oku.</h2>
-            <p id="heroSummary">Döngü verisiyle bugün hangi tona dikkat edeceğini, neyi yumuşatacağını ve hangi hamlenin iyi geleceğini gör.</p>
+            <p id="heroSummary">Bugün nasıl yaklaşacağını, hangi cümlelerden kaçınacağını ve neyi öncelemen gerektiğini gör.</p>
           </div>
           <div class="hero-reading" aria-label="Bugünün dikkat notları">
             <div class="signal-card watch">
-              <b>Dikkat</b>
+              <b>Dikkat et</b>
               <span id="heroWatch">-</span>
             </div>
             <div class="signal-card care">
-              <b>İyi gelen</b>
+              <b>Yap</b>
               <span id="heroCare">-</span>
             </div>
             <div class="signal-card avoid">
-              <b>Kaçın</b>
+              <b>Yapma</b>
               <span id="heroAvoid">-</span>
             </div>
             <div class="signal-card move">
-              <b>Net hamle</b>
+              <b>Bugünkü hamlen</b>
               <span id="heroMove">-</span>
             </div>
           </div>
@@ -909,7 +909,7 @@
               <strong id="heroMode">-</strong>
             </div>
           </div>
-          <div class="profile-strip" id="heroPersonal">Kişisel sinyal yükleniyor.</div>
+          <div class="profile-strip" id="heroPersonal">Sana özel pusula yükleniyor.</div>
         </article>
 
         <aside class="illustration-card" aria-label="Döngü illüstrasyonu">
@@ -967,7 +967,7 @@
       <section id="dashboardView" class="grid">
         <div class="section">
           <div class="section-head">
-            <h2>Güncel Projeksiyon</h2>
+            <h2>Bugünkü Pusula</h2>
             <div class="actions">
               <button id="notifyBtn" title="Bugünün yorumunu bildirim olarak göster">Bildirim</button>
               <button id="useTodayBtn" title="Bugünün tarihine dön">Bugün</button>
@@ -1005,8 +1005,8 @@
           </div>
           <div class="section-body">
             <div class="profile-panel">
-              <b>Kişisel veri havuzu</b>
-              <small>WhatsApp özetinden gelen sinyaller ham mesaj olmadan modele eklendi.</small>
+              <b>Sana özel veri havuzu</b>
+              <small>Geçmiş sinyaller ham mesaj olmadan, bugün nasıl davranman gerektiğini netleştirmek için modele eklendi.</small>
               <ul id="profileSignals"></ul>
             </div>
             <form id="entryForm" class="form-grid">
@@ -1134,17 +1134,17 @@
       sample: "70k+ Erva mesajı, 2023-12-08 / 2026-07-06",
       cycle: "Geçerli aralıklardan ortalama döngü yaklaşık 33 gün; eksik kayıt olan uzun boşluklar ortalamadan dışlanır.",
       signals: [
-        "Plan, saat ve müsaitlik dili çok sık: net saat, seçenekli plan ve son dakika belirsizliğini azaltmak daha güvenli.",
-        "Uyku, yorgunluk, mide, baş/bel ağrısı gibi bedensel notlar sık: tavsiye verirken önce konfor ve enerji kontrolü yapılmalı.",
-        "Luteal/PMS civarında stres/sinir ve güvence/onarma sinyalleri yoğunlaşıyor: geç cevap, belirsizlik ve sert ton daha riskli.",
-        "Onarım dili değerli görünüyor: kısa özür, teşekkür, güven verme ve yanında kalma hissi tartışmadan daha etkili."
+        "Senin için net saat ve seçenekli plan daha güvenli: belirsiz bırakma, son dakikaya sıkıştırma.",
+        "Önce beden kontrolü yap: uyku, yorgunluk, mide, baş/bel ağrısı sinyallerini sormadan planı büyütme.",
+        "Luteal/PMS civarında geç cevap, belirsizlik ve sert ton daha riskli: tempoyu düşür.",
+        "Onarım dilini erken kullan: kısa özür, teşekkür ve güven verme tartışmadan daha etkili."
       ],
       phaseAdvice: {
-        period: "Kişisel veri: regl çevresinde ağrı/beden sinyali göründüğü için önce konfor, dinlenme ve kısa iletişim.",
-        follicular: "Kişisel veri: iyi görünmesi tüm kapasitenin geri geldiği anlamına gelmeyebilir; seçenekli plan daha güvenli.",
-        ovulation: "Kişisel veri: sosyal/plan alanı açılabilir ama olumlu sinyal bekle; davet et, dayatma.",
-        luteal: "Kişisel veri: plan netliği ve güvence önemli; son dakika değişikliklerini yumuşat.",
-        pms: "Kişisel veri: stres/sinir/güvence sinyali bu pencerede daha anlamlı; belirsizlik ve geç cevabı azalt."
+        period: "Sana özel: önce konforu sor, kısa yaz, planı hafiflet; ağrı/uyku ihtimalini hesaba kat.",
+        follicular: "Sana özel: iyi görünse bile kapasite varsayma; seçenekli plan yap ve çıkış kapısı bırak.",
+        ovulation: "Sana özel: davet et ama dayatma; olumlu sinyal gelirse planı büyüt, gelmezse sakin tut.",
+        luteal: "Sana özel: saatleri netleştir, son dakika değişikliklerini yumuşat, güven veren kısa cümle kur.",
+        pms: "Sana özel: geç cevap ve belirsizliği azalt; haklı çıkmaya değil güven vermeye çalış."
       }
     };
 
@@ -1154,50 +1154,50 @@
         tone: "kramp, yorgunluk, düşük enerji, uyku ihtiyacı veya içe çekilme görülebilir",
         action: "Sakin konuş; fiziksel rahatlık, dinlenme ve pratik destek öncelikli olsun.",
         hormone: "Östrojen ve progesteron düşüktür; rahim iç tabakası atılırken kramp, baş ağrısı, uyku ve enerji değişimleri görülebilir.",
-        watch: "Ağrı, uykusuzluk ve yorgunluk varsa hızlı cevap, yoğun plan ve uzun tartışma normalden daha zor gelebilir.",
-        care: "Dinlenme alanı aç, pratik destek teklif et, kısa ve net sorular sor: su, yemek, sıcaklık, sessizlik.",
-        avoid: "Abartıyorsun, biraz dayan, şimdi konuşmak zorundayız, planı iptal edemezsin.",
-        move: "Bugün hedef performans değil rahatlama: düşük tempo, erken uyku ve fiziksel konforu fark etmek."
+        watch: "Hızlı cevap, yoğun plan ve uzun konuşma bekleme; önce ağrı, uyku ve yorgunluk ihtimalini düşün.",
+        care: "Kısa sor: su, yemek, sıcaklık, sessizlik veya dinlenme ister misin? Pratik destek teklif et.",
+        avoid: "Abartıyorsun, biraz dayan, şimdi konuşmak zorundayız, planı iptal edemezsin deme.",
+        move: "Planı hafiflet, tonu yumuşat, fiziksel konforu öncele."
       },
       follicular: {
         label: "Foliküler",
         tone: "enerji toparlanabilir, odak ve iletişim daha açık hissedilebilir",
         action: "Plan yapılabilir; yine de uyku, stres ve önceki günün ağrı/yorgunluk notuna bak.",
         hormone: "Östrojen yükselme eğilimindedir; bazı kişilerde enerji, motivasyon ve sosyal açıklık artabilir.",
-        watch: "İyi görünmesi tüm kapasitenin geri geldiği anlamına gelmeyebilir; günü aşırı doldurmak ters tepebilir.",
-        care: "Hafif plan, seçenek sunmak ve beraber karar almak iyi çalışır; kontrol değil ortak ritim kur.",
-        avoid: "Madem iyisin, her şeyi şimdi yapalım; geçen gün kötüydün şimdi düzeldin.",
-        move: "Plan öner ama kaçış kapısı bırak: istemezsen sakin tutarız gibi net ve rahat bir alan aç."
+        watch: "İyi görünmesini tam kapasite sanma; günü aşırı doldurma.",
+        care: "Hafif plan öner, seçenek sun, beraber karar al; kontrol etmeye çalışma.",
+        avoid: "Madem iyisin, her şeyi şimdi yapalım; geçen gün kötüydün şimdi düzeldin deme.",
+        move: "Plan öner ama çıkış kapısı bırak: istemezsen sakin tutarız."
       },
       ovulation: {
         label: "Ovulasyon çevresi",
         tone: "bazı kişilerde enerji, sosyal açıklık ve özgüven artabilir; bazılarında ağrı veya hassasiyet olabilir",
         action: "Sosyal/romantik plan için iyi bir pencere olabilir ama bedensel sinyali kontrol et.",
         hormone: "Östrojen yüksek seviyelere yaklaşır; LH artışı ovulasyonu tetikler. Akıntı, vücut ısısı ve hafif ağrı değişebilir.",
-        watch: "Bu fazı otomatik flört/temas isteği diye okumak baskı yaratabilir; olumlu sinyal varsa ilerle.",
-        care: "Net beğeni, güzel plan ve seçenekli teklif iyi gelir; beklenti değil davet dili kullan.",
-        avoid: "Nasılsa modun iyi, bunu kabul edersin; bugün kesin daha sosyal olmalısın.",
-        move: "Bir plan öner ve cevabı veri kabul et: enerji varsa büyüt, yoksa sakin tut."
+        watch: "Bu dönemi otomatik yakınlık isteği gibi okuma; olumlu sinyal yoksa zorlamadan dur.",
+        care: "Net beğeni göster, güzel ama seçenekli teklif yap; beklenti değil davet dili kullan.",
+        avoid: "Nasılsa modun iyi, bunu kabul edersin; bugün kesin daha sosyal olmalısın deme.",
+        move: "Bir plan öner; cevabı veri kabul et. Enerji varsa büyüt, yoksa sakin tut."
       },
       luteal: {
         label: "Luteal",
         tone: "progesteron etkisiyle uyku, iştah, şişkinlik, odak ve hassasiyet değişebilir",
         action: "Netlik, düzen ve düşük sürpriz iyi gelir; stres/uyku notları daha belirleyici hale gelir.",
         hormone: "Ovulasyon sonrası progesteron baskınlaşır; gebelik olmazsa hormon düşüşü PMS belirtilerini tetikleyebilir.",
-        watch: "Belirsizlik, son dakika değişikliği, açlık/uykusuzluk ve üstü kapalı konuşmalar gerilimi büyütebilir.",
-        care: "Saatleri netleştir, küçük sorumlulukları üstlen, yemek/uyku/stres yükünü hafifletmeye çalış.",
-        avoid: "Bakarız, sonra konuşuruz, çok düşünüyorsun, bunda büyütecek ne var.",
-        move: "Söz verdiğin şeyi küçük bile olsa yap; güven bu fazda büyük jestten daha iyi çalışır."
+        watch: "Belirsizlik, son dakika değişikliği ve üstü kapalı konuşma riskli; net ol.",
+        care: "Saatleri netleştir, küçük sorumluluk al, yemek/uyku/stres yükünü hafiflet.",
+        avoid: "Bakarız, sonra konuşuruz, çok düşünüyorsun, bunda büyütecek ne var deme.",
+        move: "Söz verdiğin şeyi küçük bile olsa yap; bugün güven büyük jestten daha iyi çalışır."
       },
       pms: {
         label: "PMS penceresi",
         tone: "irritabilite, kaygı, duygu dalgalanması, yorgunluk, uyku/iştah değişimi ve odak zorluğu görülebilir",
         action: "Savunmaya geçme; önce duyguyu kabul et, sonra çözüm isteyip istemediğini sor.",
         hormone: "Regl öncesi östrojen/progesteron dalgalanması ve düşüşü bazı kişilerde PMS belirtilerini artırabilir; belirtiler genelde regl başladıktan sonra azalır.",
-        watch: "Eleştiri, geç cevap, belirsizlik, kafein/alkol, uykusuzluk ve yoğun stres bugün daha sert hissedilebilir.",
-        care: "Güven ver, seçenekleri azalt, çatışmayı büyütme; yürüyüş, nefes, uyku ve düzenli yemek gibi basit destekleri öncele.",
-        avoid: "Yine mi, neden böyle oldun, sakin ol artık, hormonların yüzünden böyle konuşuyorsun.",
-        move: "Bugün kazanılacak şey haklı çıkmak değil; güven, yumuşaklık ve yanında kalma hissi."
+        watch: "Eleştiri, geç cevap, belirsizlik ve sert ton bugün daha ağır gelebilir; savunmaya geçme.",
+        care: "Güven ver, seçenekleri azalt, çatışmayı büyütme; basit destek öner: yemek, yürüyüş, uyku, nefes.",
+        avoid: "Yine mi, neden böyle oldun, sakin ol artık, hormonların yüzünden böyle konuşuyorsun deme.",
+        move: "Haklı çıkmaya çalışma; yanında kaldığını hissettir."
       }
     };
 
@@ -1385,7 +1385,7 @@
       el.heroCare.textContent = profile.care;
       el.heroAvoid.textContent = profile.avoid;
       el.heroMove.textContent = profile.move;
-      el.heroPersonal.innerHTML = `<b>Kişisel sinyal:</b> ${escapeHTML(personProfile.phaseAdvice[profile.key])}`;
+      el.heroPersonal.innerHTML = `<b>Sana özel pusula:</b> ${escapeHTML(personProfile.phaseAdvice[profile.key])}`;
       el.heroDay.textContent = `${model.currentDay}. gün`;
       el.heroNext.textContent = `${formatShortDate(model.nextStart)} ±${model.margin}g`;
       el.heroMode.textContent = mode;
@@ -1411,25 +1411,25 @@
       const daysToNext = daysBetween(model.selected, model.nextStart);
       const reading = getDailyReading(model, profile, daysToNext);
       el.todayCard.innerHTML = `
-        <h3>${formatDate(model.selected)} · Günün Yorumu</h3>
+        <h3>${formatDate(model.selected)} · Bugünkü Davranış Pusulan</h3>
         <p><b>${reading.headline}</b></p>
         <p>${reading.summary}</p>
-        <p><b>Kişisel sinyal:</b> ${personProfile.phaseAdvice[profile.key]}</p>
+        <p><b>Sana özel karar:</b> ${personProfile.phaseAdvice[profile.key]}</p>
         <div class="reading-grid">
           <div class="reading-item watch">
-            <b>Şu an dikkat</b>
+            <b>Dikkat et</b>
             <span>${profile.watch}</span>
           </div>
           <div class="reading-item care">
-            <b>Bugün iyi gelen</b>
+            <b>Yap</b>
             <span>${profile.care}</span>
           </div>
           <div class="reading-item avoid">
-            <b>Kaçın</b>
+            <b>Yapma</b>
             <span>${profile.avoid}</span>
           </div>
           <div class="reading-item move">
-            <b>Net hamle</b>
+            <b>Bugünkü hamlen</b>
             <span>${profile.move}</span>
           </div>
         </div>
@@ -1446,11 +1446,11 @@
         options: {
           body: [
             reading.summary,
-            `Dikkat: ${profile.watch}`,
-            `İyi gelen: ${profile.care}`,
-            `Kaçın: ${profile.avoid}`,
-            `Net hamle: ${profile.move}`,
-            `Kişisel sinyal: ${personProfile.phaseAdvice[profile.key]}`
+            `Dikkat et: ${profile.watch}`,
+            `Yap: ${profile.care}`,
+            `Yapma: ${profile.avoid}`,
+            `Bugünkü hamlen: ${profile.move}`,
+            `Sana özel karar: ${personProfile.phaseAdvice[profile.key]}`
           ].join("\n\n"),
           icon: "./icon.svg",
           badge: "./icon.svg",
@@ -1466,12 +1466,12 @@
     function getDailyReading(model, profile, daysToNext) {
       const angle = dailyAngles[dateSeed(model.selected) % dailyAngles.length];
       const proximity = daysToNext <= model.margin
-        ? "Regl kapısı yakın; bugün hassasiyet hesabını biraz daha yüksek tut."
+        ? "Regl kapısı yakın; bugün tempoyu düşür, belirsizliği azalt, tartışma başlatma."
         : daysToNext <= 10
-          ? "Regl öncesi dönem yaklaşmış olabilir; uyku, stres ve belirsizlik etkisini daha çok izlemek iyi gelir."
+          ? "Regl öncesi dönem yaklaşmış olabilir; uyku, stres ve geç cevap riskini sen yönet."
           : model.currentDay >= 12 && model.currentDay <= 16
-            ? "Ovulasyon çevresi olabilir; enerji ve sosyal açıklık artabilir ama beden sinyali belirleyici."
-            : "Döngü bugün daha dengeli; kişinin temposunu merkeze almak en doğru ayar.";
+            ? "Ovulasyon çevresi olabilir; teklifini davet gibi kur, beklentiye çevirme."
+            : "Döngü bugün daha dengeli; yine de planı seçenekli ve yumuşak tut.";
 
       return {
         headline: `${profile.label}: ${angle}`,
