@@ -1,0 +1,19 @@
+{
+  "name": "Döngü Planlayıcı",
+  "short_name": "Döngü",
+  "description": "Döngü verisine göre günlük dikkat, yaklaşım ve bakım notları.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#16071f",
+  "theme_color": "#16071f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

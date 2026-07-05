@@ -1,0 +1,1634 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Döngü Planlayıcı</title>
+  <meta name="theme-color" content="#16071f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Döngü">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #fff8ff;
+      --muted: #d6c5df;
+      --quiet: #a991ba;
+      --line: rgba(255, 255, 255, .16);
+      --bg: #16071f;
+      --panel: rgba(44, 18, 61, .62);
+      --panel-strong: rgba(68, 28, 91, .72);
+      --panel-soft: rgba(255, 255, 255, .08);
+      --purple-950: #16071f;
+      --purple-900: #241033;
+      --purple-800: #35154c;
+      --purple-700: #5b2d91;
+      --purple-500: #a56ee4;
+      --purple-100: rgba(238, 221, 255, .18);
+      --rose: #f06b9f;
+      --rose-soft: rgba(240, 107, 159, .18);
+      --aqua: #5ad1c7;
+      --aqua-soft: rgba(90, 209, 199, .15);
+      --gold: #f2b75b;
+      --gold-soft: rgba(242, 183, 91, .16);
+      --period: #f06b9f;
+      --follicular: #5ad1c7;
+      --ovulation: #f2b75b;
+      --luteal: #a98cff;
+      --pms: #d86bd7;
+      --focus: #c9a6ff;
+      --shadow: 0 24px 70px rgba(3, 0, 12, .34);
+      --soft-shadow: 0 12px 34px rgba(3, 0, 12, .24);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .035) 0 1px, transparent 1px 42px),
+        linear-gradient(225deg, rgba(255, 255, 255, .026) 0 1px, transparent 1px 54px),
+        linear-gradient(180deg, #14051d 0%, #241033 38%, #180920 100%);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .1);
+      color: #fff8ff;
+      cursor: pointer;
+      border-radius: 8px;
+      min-height: 42px;
+      padding: 9px 13px;
+      font-weight: 750;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--soft-shadow);
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #f06b9f, #a56ee4);
+      border-color: rgba(255, 255, 255, .18);
+      color: #fff;
+    }
+
+    button.danger {
+      color: #ffd8e4;
+      border-color: rgba(240, 107, 159, .34);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, .1);
+      color: #fff8ff;
+      min-height: 43px;
+      outline-color: var(--purple-500);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(255, 248, 255, .45);
+    }
+
+    select option {
+      color: #251c32;
+    }
+
+    textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .app {
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .app::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(110deg, transparent 0 18%, rgba(201, 166, 255, .08) 18.2%, transparent 18.5% 64%, rgba(240, 107, 159, .075) 64.2%, transparent 64.5%),
+        linear-gradient(72deg, transparent 0 29%, rgba(255, 248, 255, .045) 29.2%, transparent 29.45% 78%, rgba(90, 209, 199, .05) 78.2%, transparent 78.45%);
+    }
+
+    .app::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .36;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, .9) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 32% 8%, rgba(255, 255, 255, .7) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 74% 16%, rgba(255, 255, 255, .7) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 88% 30%, rgba(255, 255, 255, .55) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 58% 64%, rgba(255, 255, 255, .45) 0 1px, transparent 1.2px);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: rgba(20, 5, 29, .72);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .topbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      color: var(--quiet);
+      font-size: 13px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 4px;
+      background: rgba(255, 255, 255, .08);
+      box-shadow: 0 8px 22px rgba(3, 0, 12, .16);
+    }
+
+    .tab {
+      border: 0;
+      min-height: 34px;
+      padding: 6px 12px;
+      color: var(--muted);
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .tab.active {
+      background: rgba(255, 255, 255, .18);
+      color: #fff;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px 18px 40px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 348px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .12) 0 1px, transparent 1px 36px),
+        linear-gradient(160deg, rgba(90, 209, 199, .12), transparent 34%),
+        linear-gradient(135deg, rgba(45, 15, 67, .94) 0%, rgba(74, 22, 94, .92) 48%, rgba(126, 42, 102, .9) 100%);
+      box-shadow: var(--shadow);
+      color: #fff;
+      padding: 26px;
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -64px;
+      top: -64px;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 38% 40%, transparent 0 54px, rgba(255, 248, 255, .18) 55px 74px, transparent 75px);
+      border: 1px solid rgba(255, 255, 255, .06);
+      transform: rotate(-18deg);
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 620px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, .9);
+      background: rgba(255, 255, 255, .1);
+      margin-bottom: 14px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(32px, 4.4vw, 58px);
+      line-height: .98;
+      letter-spacing: 0;
+      max-width: 680px;
+    }
+
+    .hero-copy p {
+      margin: 14px 0 0;
+      color: rgba(255, 255, 255, .83);
+      line-height: 1.55;
+      font-size: 15px;
+      max-width: 560px;
+    }
+
+    .hero-reading {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 680px;
+    }
+
+    .signal-card {
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-left-width: 5px;
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, .09);
+      min-height: 92px;
+    }
+
+    .signal-card b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .signal-card span {
+      display: block;
+      color: rgba(255, 248, 255, .78);
+      font-size: 13px;
+      line-height: 1.38;
+    }
+
+    .signal-card.watch {
+      border-left-color: var(--gold);
+      background: linear-gradient(180deg, rgba(242, 183, 91, .17), rgba(255, 255, 255, .07));
+    }
+
+    .signal-card.care {
+      border-left-color: var(--aqua);
+      background: linear-gradient(180deg, rgba(90, 209, 199, .15), rgba(255, 255, 255, .07));
+    }
+
+    .signal-card.avoid {
+      border-left-color: var(--rose);
+      background: linear-gradient(180deg, rgba(240, 107, 159, .16), rgba(255, 255, 255, .07));
+    }
+
+    .signal-card.move {
+      border-left-color: var(--luteal);
+      background: linear-gradient(180deg, rgba(169, 140, 255, .16), rgba(255, 255, 255, .07));
+    }
+
+    .hero-quick {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 640px;
+    }
+
+    .quick-pill {
+      border: 1px solid rgba(255, 255, 255, .25);
+      border-radius: 8px;
+      padding: 11px;
+      background: rgba(255, 255, 255, .13);
+      backdrop-filter: blur(12px);
+      min-height: 76px;
+    }
+
+    .quick-pill small {
+      display: block;
+      color: rgba(255, 255, 255, .7);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .quick-pill strong {
+      display: block;
+      color: #fff;
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .profile-strip {
+      position: relative;
+      z-index: 1;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-left: 5px solid var(--aqua);
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, .08);
+      color: rgba(255, 248, 255, .82);
+      font-size: 13px;
+      line-height: 1.42;
+      max-width: 680px;
+    }
+
+    .profile-strip b {
+      color: #fff;
+    }
+
+    .illustration-card {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .065));
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      align-content: center;
+      overflow: hidden;
+    }
+
+    .illustration-card::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .cycle-art {
+      width: 100%;
+      aspect-ratio: 1.2;
+      max-height: 300px;
+      display: block;
+    }
+
+    .art-caption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 2px;
+    }
+
+    .art-caption b {
+      display: block;
+      font-size: 15px;
+    }
+
+    .art-caption span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .phase-key {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: flex-end;
+    }
+
+    .key-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(300px, .7fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .section-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .section-body {
+      padding: 16px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      background: rgba(255, 255, 255, .08);
+      min-height: 88px;
+    }
+
+    .metric small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .today {
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-left: 5px solid var(--focus);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .07));
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      box-shadow: var(--soft-shadow);
+    }
+
+    .today h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .today p {
+      margin: 6px 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .technical-note {
+      border-top: 1px solid rgba(255, 255, 255, .1);
+      padding-top: 12px;
+      margin-top: 14px !important;
+      color: var(--quiet) !important;
+      font-size: 13px;
+    }
+
+    .reading-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .reading-item {
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-left-width: 5px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .08);
+      padding: 11px;
+      min-height: 92px;
+    }
+
+    .reading-item.watch { border-left-color: var(--gold); }
+    .reading-item.care { border-left-color: var(--aqua); }
+    .reading-item.avoid { border-left-color: var(--rose); }
+    .reading-item.move { border-left-color: var(--luteal); }
+
+    .reading-item b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .reading-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .day {
+      display: grid;
+      grid-template-columns: 112px 1fr 110px;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .075);
+      box-shadow: 0 6px 18px rgba(55, 25, 84, .05);
+    }
+
+    .day .date {
+      font-weight: 700;
+    }
+
+    .phase {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 750;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: var(--purple-100);
+      color: #fff8ff;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--focus);
+      flex: 0 0 auto;
+    }
+
+    .phase.period .dot { background: var(--period); }
+    .phase.follicular .dot { background: var(--follicular); }
+    .phase.ovulation .dot { background: var(--ovulation); }
+    .phase.luteal .dot { background: var(--luteal); }
+    .phase.pms .dot { background: var(--pms); }
+
+    .tone {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .confidence {
+      text-align: right;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .profile-panel {
+      display: grid;
+      gap: 9px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+      background: rgba(255, 255, 255, .07);
+    }
+
+    .profile-panel b {
+      font-size: 14px;
+    }
+
+    .profile-panel small,
+    .profile-panel li {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.42;
+    }
+
+    .profile-panel ul {
+      margin: 0;
+      padding-left: 17px;
+    }
+
+    .inline {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .event-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .event {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      gap: 5px;
+      background: rgba(255, 255, 255, .075);
+    }
+
+    .event-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .event b {
+      font-size: 14px;
+    }
+
+    .event p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--quiet);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .hidden { display: none; }
+
+    .notice {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px;
+    }
+
+    @media (max-width: 860px) {
+      .topbar-inner {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .tabs {
+        overflow-x: auto;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        min-height: 360px;
+        padding: 22px;
+      }
+
+      .hero-reading {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-quick {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .day {
+        grid-template-columns: 1fr;
+      }
+
+      .confidence {
+        text-align: left;
+      }
+
+      .reading-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .art-caption {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .phase-key {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      main {
+        padding: 16px 12px 30px;
+      }
+
+      .topbar-inner {
+        padding: 12px;
+      }
+
+      .brand span {
+        max-width: 320px;
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .section-head .actions {
+        width: 100%;
+      }
+
+      .section-head .actions button {
+        flex: 1 1 120px;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .inline {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <h1>Döngü Planlayıcı</h1>
+          <span>Günün ritmi, dikkat noktası ve yumuşak yaklaşım notları</span>
+        </div>
+        <nav class="tabs" aria-label="Görünüm">
+          <button class="tab active" data-view="dashboard">Plan</button>
+          <button class="tab" data-view="data">Veri</button>
+          <button class="tab" data-view="thesis">Tez Notları</button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Günün döngü özeti">
+        <article class="hero-card">
+          <div class="hero-copy">
+            <span class="eyebrow" id="heroPhase">Bugünün fazı</span>
+            <h2 id="heroTitle">Günün ritmini oku.</h2>
+            <p id="heroSummary">Döngü verisiyle bugün hangi tona dikkat edeceğini, neyi yumuşatacağını ve hangi hamlenin iyi geleceğini gör.</p>
+          </div>
+          <div class="hero-reading" aria-label="Bugünün dikkat notları">
+            <div class="signal-card watch">
+              <b>Dikkat</b>
+              <span id="heroWatch">-</span>
+            </div>
+            <div class="signal-card care">
+              <b>İyi gelen</b>
+              <span id="heroCare">-</span>
+            </div>
+            <div class="signal-card avoid">
+              <b>Kaçın</b>
+              <span id="heroAvoid">-</span>
+            </div>
+            <div class="signal-card move">
+              <b>Net hamle</b>
+              <span id="heroMove">-</span>
+            </div>
+          </div>
+          <div class="hero-quick">
+            <div class="quick-pill">
+              <small>Döngü günü</small>
+              <strong id="heroDay">-</strong>
+            </div>
+            <div class="quick-pill">
+              <small>Yaklaşan tarih</small>
+              <strong id="heroNext">-</strong>
+            </div>
+            <div class="quick-pill">
+              <small>Dikkat modu</small>
+              <strong id="heroMode">-</strong>
+            </div>
+          </div>
+          <div class="profile-strip" id="heroPersonal">Kişisel sinyal yükleniyor.</div>
+        </article>
+
+        <aside class="illustration-card" aria-label="Döngü illüstrasyonu">
+          <svg class="cycle-art" viewBox="0 0 520 430" role="img" aria-labelledby="cycleArtTitle">
+            <title id="cycleArtTitle">Ay ve döngü fazlarını gösteren mistik vektör çizim</title>
+            <defs>
+              <linearGradient id="cycleBg" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#32124f"/>
+                <stop offset="100%" stop-color="#1b0828"/>
+              </linearGradient>
+              <linearGradient id="cycleRing" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#c9a6ff"/>
+                <stop offset="45%" stop-color="#f06b9f"/>
+                <stop offset="100%" stop-color="#5ad1c7"/>
+              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#05000a" flood-opacity=".34"/>
+              </filter>
+            </defs>
+            <rect x="18" y="20" width="484" height="382" rx="28" fill="url(#cycleBg)" opacity=".72"/>
+            <path d="M72 338 C140 265, 206 320, 278 244 C335 184, 384 194, 449 96" fill="none" stroke="#fff8ff" stroke-width="1.2" opacity=".16"/>
+            <path d="M80 109 C139 57, 239 41, 321 83 C415 131, 445 239, 394 325 C344 408, 222 417, 139 357 C56 296, 15 180, 80 109Z" fill="rgba(255,255,255,.06)" filter="url(#softShadow)"/>
+            <circle cx="244" cy="218" r="122" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="40"/>
+            <path d="M244 96a122 122 0 0 1 122 122" fill="none" stroke="#f06b9f" stroke-width="40" stroke-linecap="round"/>
+            <path d="M366 218a122 122 0 0 1-122 122" fill="none" stroke="#f2b75b" stroke-width="40" stroke-linecap="round"/>
+            <path d="M244 340a122 122 0 0 1-122-122" fill="none" stroke="#5ad1c7" stroke-width="40" stroke-linecap="round"/>
+            <path d="M122 218a122 122 0 0 1 122-122" fill="none" stroke="#a98cff" stroke-width="40" stroke-linecap="round"/>
+            <circle cx="244" cy="218" r="78" fill="rgba(12,3,18,.72)" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+            <path d="M270 144c-39 17-63 55-63 96 0 43 25 79 63 95-17 12-38 19-61 19-59 0-107-48-107-107s48-107 107-107c23 0 44 7 61 19Z" fill="#fff8ff" opacity=".9"/>
+            <path d="M241 226c-8-31 8-66 39-82 18 34 6 75-28 94-5 3-9-2-11-12Z" fill="#f06b9f" opacity=".74"/>
+            <circle cx="244" cy="218" r="7" fill="#c9a6ff"/>
+            <path d="M403 83l13 27 29 6-21 21 4 30-26-14-27 14 5-30-22-21 30-5 15-28Z" fill="rgba(242,183,91,.18)" stroke="#f2b75b" stroke-width="3"/>
+            <path d="M96 312c29-17 65-16 95 3-22 42-76 45-95-3Z" fill="rgba(90,209,199,.12)" stroke="#5ad1c7" stroke-width="3"/>
+            <path d="M385 324c23-7 46 4 57 25-22 25-61 15-68-16 3-4 7-7 11-9Z" fill="rgba(240,107,159,.13)" stroke="#f06b9f" stroke-width="3"/>
+            <circle cx="88" cy="99" r="2.4" fill="#fff8ff" opacity=".8"/>
+            <circle cx="146" cy="69" r="1.8" fill="#fff8ff" opacity=".58"/>
+            <circle cx="430" cy="246" r="2" fill="#fff8ff" opacity=".7"/>
+            <circle cx="368" cy="352" r="1.6" fill="#fff8ff" opacity=".55"/>
+            <text x="244" y="392" text-anchor="middle" fill="#d6c5df" font-size="18" font-weight="700">32 günlük ay haritası</text>
+          </svg>
+          <div class="art-caption">
+            <div>
+              <b>Ay haritası</b>
+              <span>Faz değiştikçe yaklaşım da yumuşar.</span>
+            </div>
+            <div class="phase-key">
+              <span class="key-chip"><span class="dot" style="background: var(--period)"></span>Regl</span>
+              <span class="key-chip"><span class="dot" style="background: var(--follicular)"></span>Foliküler</span>
+              <span class="key-chip"><span class="dot" style="background: var(--ovulation)"></span>Ovulasyon</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="dashboardView" class="grid">
+        <div class="section">
+          <div class="section-head">
+            <h2>Güncel Projeksiyon</h2>
+            <div class="actions">
+              <button id="notifyBtn" title="Bugünün yorumunu bildirim olarak göster">Bildirim</button>
+              <button id="useTodayBtn" title="Bugünün tarihine dön">Bugün</button>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="metrics">
+              <div class="metric">
+                <small>Ortalama döngü</small>
+                <strong id="avgCycle">-</strong>
+              </div>
+              <div class="metric">
+                <small>Son başlangıç</small>
+                <strong id="lastStart">-</strong>
+              </div>
+              <div class="metric">
+                <small>Sıradaki tahmin</small>
+                <strong id="nextStart">-</strong>
+              </div>
+              <div class="metric">
+                <small>Bugün</small>
+                <strong id="cycleDay">-</strong>
+              </div>
+            </div>
+
+            <article class="today" id="todayCard"></article>
+
+            <div class="timeline" id="timeline"></div>
+          </div>
+        </div>
+
+        <aside class="section">
+          <div class="section-head">
+            <h2>Ek Veri Gir</h2>
+          </div>
+          <div class="section-body">
+            <div class="profile-panel">
+              <b>Kişisel veri havuzu</b>
+              <small>WhatsApp özetinden gelen sinyaller ham mesaj olmadan modele eklendi.</small>
+              <ul id="profileSignals"></ul>
+            </div>
+            <form id="entryForm" class="form-grid">
+              <div class="inline">
+                <label>
+                  Tarih
+                  <input id="entryDate" type="date" required>
+                </label>
+                <label>
+                  Veri türü
+                  <select id="entryType">
+                    <option value="period">Regl başlangıcı</option>
+                    <option value="symptom">Semptom</option>
+                    <option value="mood">Duygu tonu</option>
+                    <option value="event">Önemli olay</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                Şiddet / etki
+                <select id="entryIntensity">
+                  <option value="1">1 - düşük</option>
+                  <option value="2">2</option>
+                  <option value="3" selected>3 - orta</option>
+                  <option value="4">4</option>
+                  <option value="5">5 - yüksek</option>
+                </select>
+              </label>
+              <label>
+                Not
+                <textarea id="entryNote" placeholder="Örn. ağrı, hassasiyet, enerjik, tartışma istemiyor, uyku az..."></textarea>
+              </label>
+              <div class="actions">
+                <button class="primary" type="submit">Kaydet</button>
+                <button type="button" id="exportBtn">JSON dışa aktar</button>
+                <button type="button" id="importBtn">JSON içe aktar</button>
+                <button type="button" id="resetBtn" class="danger">Sıfırla</button>
+              </div>
+              <input id="importFile" class="hidden" type="file" accept="application/json">
+            </form>
+            <div class="event-list" id="recentEntries"></div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="dataView" class="section hidden">
+        <div class="section-head">
+          <h2>Kayıtlı Veriler</h2>
+        </div>
+        <div class="section-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Tarih</th>
+                <th>Tür</th>
+                <th>Etki</th>
+                <th>Not</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="dataTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="thesisView" class="section hidden">
+        <div class="section-head">
+          <h2>Tez Çerçevesi</h2>
+        </div>
+        <div class="section-body">
+          <div class="notice">
+            Bu model tıbbi tanı koymaz. Amaç, geçmiş döngü tarihlerini kullanarak iletişim zamanlaması,
+            bakım dili ve olası duygu/enerji değişimlerine karşı daha dikkatli bir ilişki planı oluşturmaktır.
+          </div>
+          <h3>Çalışma hipotezi</h3>
+          <p>Menstrüel döngü, kişiyi tek başına belirlemez; fakat ağrı, uyku, stres, PMS belirtileri ve hormon dalgalanmalarıyla birlikte duygu tonu, enerji ve temas ihtiyacını etkileyebilir.</p>
+          <h3>Keskin pencere modeli</h3>
+          <p>Bu veride ortalama döngü yaklaşık 32 gündür. Regl öncesi hassasiyet bazı kişilerde 1-2 hafta önce başlayabilir; uygulama en yüksek dikkat penceresini beklenen tarihe yaklaştıkça artırır.</p>
+          <h3>Davranış ilkesi</h3>
+          <p>Regl öncesi ve regl günlerinde çözüm dayatmak yerine onaylama, sakinlik, fiziksel rahatlık ve düşük beklenti; daha enerjik fazlarda ise plan, sosyal temas ve açık konuşma denenebilir.</p>
+          <h3>Araştırma notu</h3>
+          <p>Model kesin hormon ölçümü yapmaz. Daha doğru öneri için günlük duygu, uyku, ağrı, iştah, stres ve çatışma notları en az iki döngü boyunca kaydedilmelidir. PMS/PMDD değerlendirmesinde prospektif günlük kayıtlar geriye dönük hatırlamadan daha güvenilir kabul edilir.</p>
+          <h3>Günlük bildirim ilkesi</h3>
+          <p>GitHub Pages statik çalıştığı için kapalı PWA kendi başına her gün otomatik bildirim gönderemez. Gerçek günlük telefon bildirimi için bu proje GitHub Actions + ntfy entegrasyonuyla aynı günlük yorumu sabah telefona gönderecek şekilde hazırlanmıştır.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "dongu-planlayici-v1";
+    const MS_DAY = 24 * 60 * 60 * 1000;
+    const initialEntries = [
+      ["2024-02-12", "period", 3, "WhatsApp analizi: regli oldum"],
+      ["2024-03-22", "period", 3, "WhatsApp analizi: regli oldum"],
+      ["2024-05-21", "period", 3, "WhatsApp analizi: regli oldum"],
+      ["2024-08-19", "period", 3, "WhatsApp analizi: regli oldum/oldun"],
+      ["2024-10-19", "period", 3, "WhatsApp analizi: regli oldum/oldun"],
+      ["2024-11-19", "period", 3, "Fotoğrafta: Regli oldum"],
+      ["2024-12-20", "period", 3, "Fotoğrafta: regli oldun"],
+      ["2025-01-17", "period", 3, "Fotoğrafta: Regli oldum"],
+      ["2025-02-20", "period", 3, "Fotoğrafta: Regli oldum"],
+      ["2025-03-24", "period", 3, "Fotoğrafta: Regli oldum"],
+      ["2025-04-26", "period", 3, "Fotoğrafta: Regli oldum"],
+      ["2025-06-27", "period", 3, "Fotoğrafta: Regl oldum"],
+      ["2025-07-30", "period", 3, "Fotoğrafta: Regli oldum"],
+      ["2025-10-04", "period", 3, "Fotoğrafta: regli oldum"],
+      ["2025-11-07", "period", 3, "Fotoğrafta: Regli oldum"],
+      ["2026-02-11", "period", 3, "Yıl eklenmiş tahmin: 11 Şub Çar"],
+      ["2026-03-21", "period", 3, "WhatsApp analizi: regli oldum/oldun"],
+      ["2026-04-24", "period", 3, "Yıl eklenmiş tahmin: 24 Nis Cum"],
+      ["2026-05-28", "period", 3, "WhatsApp analizi: regli oldum"],
+      ["2026-06-29", "period", 3, "WhatsApp analizi: regli oldum"]
+    ].map(([date, type, intensity, note], index) => ({
+      id: `seed-${type}-${date}`,
+      date,
+      type,
+      intensity,
+      note,
+      seed: true
+    }));
+
+    const personProfile = {
+      source: "WhatsApp konuşma özeti",
+      sample: "70k+ Erva mesajı, 2023-12-08 / 2026-07-06",
+      cycle: "Geçerli aralıklardan ortalama döngü yaklaşık 33 gün; eksik kayıt olan uzun boşluklar ortalamadan dışlanır.",
+      signals: [
+        "Plan, saat ve müsaitlik dili çok sık: net saat, seçenekli plan ve son dakika belirsizliğini azaltmak daha güvenli.",
+        "Uyku, yorgunluk, mide, baş/bel ağrısı gibi bedensel notlar sık: tavsiye verirken önce konfor ve enerji kontrolü yapılmalı.",
+        "Luteal/PMS civarında stres/sinir ve güvence/onarma sinyalleri yoğunlaşıyor: geç cevap, belirsizlik ve sert ton daha riskli.",
+        "Onarım dili değerli görünüyor: kısa özür, teşekkür, güven verme ve yanında kalma hissi tartışmadan daha etkili."
+      ],
+      phaseAdvice: {
+        period: "Kişisel veri: regl çevresinde ağrı/beden sinyali göründüğü için önce konfor, dinlenme ve kısa iletişim.",
+        follicular: "Kişisel veri: iyi görünmesi tüm kapasitenin geri geldiği anlamına gelmeyebilir; seçenekli plan daha güvenli.",
+        ovulation: "Kişisel veri: sosyal/plan alanı açılabilir ama olumlu sinyal bekle; davet et, dayatma.",
+        luteal: "Kişisel veri: plan netliği ve güvence önemli; son dakika değişikliklerini yumuşat.",
+        pms: "Kişisel veri: stres/sinir/güvence sinyali bu pencerede daha anlamlı; belirsizlik ve geç cevabı azalt."
+      }
+    };
+
+    const phaseProfiles = {
+      period: {
+        label: "Regl",
+        tone: "kramp, yorgunluk, düşük enerji, uyku ihtiyacı veya içe çekilme görülebilir",
+        action: "Sakin konuş; fiziksel rahatlık, dinlenme ve pratik destek öncelikli olsun.",
+        hormone: "Östrojen ve progesteron düşüktür; rahim iç tabakası atılırken kramp, baş ağrısı, uyku ve enerji değişimleri görülebilir.",
+        watch: "Ağrı, uykusuzluk ve yorgunluk varsa hızlı cevap, yoğun plan ve uzun tartışma normalden daha zor gelebilir.",
+        care: "Dinlenme alanı aç, pratik destek teklif et, kısa ve net sorular sor: su, yemek, sıcaklık, sessizlik.",
+        avoid: "Abartıyorsun, biraz dayan, şimdi konuşmak zorundayız, planı iptal edemezsin.",
+        move: "Bugün hedef performans değil rahatlama: düşük tempo, erken uyku ve fiziksel konforu fark etmek."
+      },
+      follicular: {
+        label: "Foliküler",
+        tone: "enerji toparlanabilir, odak ve iletişim daha açık hissedilebilir",
+        action: "Plan yapılabilir; yine de uyku, stres ve önceki günün ağrı/yorgunluk notuna bak.",
+        hormone: "Östrojen yükselme eğilimindedir; bazı kişilerde enerji, motivasyon ve sosyal açıklık artabilir.",
+        watch: "İyi görünmesi tüm kapasitenin geri geldiği anlamına gelmeyebilir; günü aşırı doldurmak ters tepebilir.",
+        care: "Hafif plan, seçenek sunmak ve beraber karar almak iyi çalışır; kontrol değil ortak ritim kur.",
+        avoid: "Madem iyisin, her şeyi şimdi yapalım; geçen gün kötüydün şimdi düzeldin.",
+        move: "Plan öner ama kaçış kapısı bırak: istemezsen sakin tutarız gibi net ve rahat bir alan aç."
+      },
+      ovulation: {
+        label: "Ovulasyon çevresi",
+        tone: "bazı kişilerde enerji, sosyal açıklık ve özgüven artabilir; bazılarında ağrı veya hassasiyet olabilir",
+        action: "Sosyal/romantik plan için iyi bir pencere olabilir ama bedensel sinyali kontrol et.",
+        hormone: "Östrojen yüksek seviyelere yaklaşır; LH artışı ovulasyonu tetikler. Akıntı, vücut ısısı ve hafif ağrı değişebilir.",
+        watch: "Bu fazı otomatik flört/temas isteği diye okumak baskı yaratabilir; olumlu sinyal varsa ilerle.",
+        care: "Net beğeni, güzel plan ve seçenekli teklif iyi gelir; beklenti değil davet dili kullan.",
+        avoid: "Nasılsa modun iyi, bunu kabul edersin; bugün kesin daha sosyal olmalısın.",
+        move: "Bir plan öner ve cevabı veri kabul et: enerji varsa büyüt, yoksa sakin tut."
+      },
+      luteal: {
+        label: "Luteal",
+        tone: "progesteron etkisiyle uyku, iştah, şişkinlik, odak ve hassasiyet değişebilir",
+        action: "Netlik, düzen ve düşük sürpriz iyi gelir; stres/uyku notları daha belirleyici hale gelir.",
+        hormone: "Ovulasyon sonrası progesteron baskınlaşır; gebelik olmazsa hormon düşüşü PMS belirtilerini tetikleyebilir.",
+        watch: "Belirsizlik, son dakika değişikliği, açlık/uykusuzluk ve üstü kapalı konuşmalar gerilimi büyütebilir.",
+        care: "Saatleri netleştir, küçük sorumlulukları üstlen, yemek/uyku/stres yükünü hafifletmeye çalış.",
+        avoid: "Bakarız, sonra konuşuruz, çok düşünüyorsun, bunda büyütecek ne var.",
+        move: "Söz verdiğin şeyi küçük bile olsa yap; güven bu fazda büyük jestten daha iyi çalışır."
+      },
+      pms: {
+        label: "PMS penceresi",
+        tone: "irritabilite, kaygı, duygu dalgalanması, yorgunluk, uyku/iştah değişimi ve odak zorluğu görülebilir",
+        action: "Savunmaya geçme; önce duyguyu kabul et, sonra çözüm isteyip istemediğini sor.",
+        hormone: "Regl öncesi östrojen/progesteron dalgalanması ve düşüşü bazı kişilerde PMS belirtilerini artırabilir; belirtiler genelde regl başladıktan sonra azalır.",
+        watch: "Eleştiri, geç cevap, belirsizlik, kafein/alkol, uykusuzluk ve yoğun stres bugün daha sert hissedilebilir.",
+        care: "Güven ver, seçenekleri azalt, çatışmayı büyütme; yürüyüş, nefes, uyku ve düzenli yemek gibi basit destekleri öncele.",
+        avoid: "Yine mi, neden böyle oldun, sakin ol artık, hormonların yüzünden böyle konuşuyorsun.",
+        move: "Bugün kazanılacak şey haklı çıkmak değil; güven, yumuşaklık ve yanında kalma hissi."
+      }
+    };
+
+    const dailyAngles = [
+      "Ritmi düşür, sinyali iyi oku.",
+      "Küçük bir cümle günü değiştirir.",
+      "Niyet değil, ton belirleyici.",
+      "Planı değil, hissi öncele.",
+      "Netlik ve şefkat aynı anda mümkün.",
+      "Yakın kal, acele ettirme.",
+      "Bugün yorumdan çok gözlem."
+    ];
+
+    const typeLabels = {
+      period: "Regl başlangıcı",
+      symptom: "Semptom",
+      mood: "Duygu tonu",
+      event: "Önemli olay"
+    };
+
+    let state = loadState();
+    let selectedDate = todayISO();
+
+    const el = {
+      heroPhase: document.querySelector("#heroPhase"),
+      heroTitle: document.querySelector("#heroTitle"),
+      heroSummary: document.querySelector("#heroSummary"),
+      heroWatch: document.querySelector("#heroWatch"),
+      heroCare: document.querySelector("#heroCare"),
+      heroAvoid: document.querySelector("#heroAvoid"),
+      heroMove: document.querySelector("#heroMove"),
+      heroPersonal: document.querySelector("#heroPersonal"),
+      heroDay: document.querySelector("#heroDay"),
+      heroNext: document.querySelector("#heroNext"),
+      heroMode: document.querySelector("#heroMode"),
+      avgCycle: document.querySelector("#avgCycle"),
+      lastStart: document.querySelector("#lastStart"),
+      nextStart: document.querySelector("#nextStart"),
+      cycleDay: document.querySelector("#cycleDay"),
+      todayCard: document.querySelector("#todayCard"),
+      timeline: document.querySelector("#timeline"),
+      notifyBtn: document.querySelector("#notifyBtn"),
+      entryForm: document.querySelector("#entryForm"),
+      entryDate: document.querySelector("#entryDate"),
+      entryType: document.querySelector("#entryType"),
+      entryIntensity: document.querySelector("#entryIntensity"),
+      entryNote: document.querySelector("#entryNote"),
+      recentEntries: document.querySelector("#recentEntries"),
+      profileSignals: document.querySelector("#profileSignals"),
+      dataTable: document.querySelector("#dataTable"),
+      useTodayBtn: document.querySelector("#useTodayBtn"),
+      exportBtn: document.querySelector("#exportBtn"),
+      importBtn: document.querySelector("#importBtn"),
+      importFile: document.querySelector("#importFile"),
+      resetBtn: document.querySelector("#resetBtn")
+    };
+
+    el.entryDate.value = selectedDate;
+    el.profileSignals.innerHTML = personProfile.signals
+      .map(signal => `<li>${escapeHTML(signal)}</li>`)
+      .join("");
+
+    document.querySelectorAll(".tab").forEach(button => {
+      button.addEventListener("click", () => setView(button.dataset.view));
+    });
+
+    el.entryForm.addEventListener("submit", event => {
+      event.preventDefault();
+      state.entries.push({
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        date: el.entryDate.value,
+        type: el.entryType.value,
+        intensity: Number(el.entryIntensity.value),
+        note: el.entryNote.value.trim(),
+        seed: false
+      });
+      el.entryNote.value = "";
+      saveState();
+      render();
+    });
+
+    el.useTodayBtn.addEventListener("click", () => {
+      selectedDate = todayISO();
+      el.entryDate.value = selectedDate;
+      render();
+    });
+
+    el.notifyBtn.addEventListener("click", async () => {
+      const model = buildModel();
+      const notification = buildNotification(model);
+      if (!("Notification" in window) || !navigator.serviceWorker) {
+        alert("Bu tarayıcı PWA bildirimi desteklemiyor.");
+        return;
+      }
+      const permission = Notification.permission === "granted"
+        ? "granted"
+        : await Notification.requestPermission();
+      if (permission !== "granted") {
+        alert("Bildirim izni verilmedi.");
+        return;
+      }
+      const registration = await navigator.serviceWorker.ready;
+      await registration.showNotification(notification.title, notification.options);
+    });
+
+    el.exportBtn.addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `dongu-verisi-${todayISO()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    el.importBtn.addEventListener("click", () => el.importFile.click());
+    el.importFile.addEventListener("change", async () => {
+      const file = el.importFile.files[0];
+      if (!file) return;
+      const next = JSON.parse(await file.text());
+      if (!Array.isArray(next.entries)) return alert("Dosya biçimi geçerli değil.");
+      state = next;
+      saveState();
+      render();
+      el.importFile.value = "";
+    });
+
+    el.resetBtn.addEventListener("click", () => {
+      if (!confirm("Eklediğin veriler silinsin ve başlangıç verisine dönülsün mü?")) return;
+      state = { entries: structuredClone(initialEntries) };
+      saveState();
+      render();
+    });
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { entries: structuredClone(initialEntries) };
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.entries)) return { entries: mergeSeedEntries(parsed.entries) };
+      } catch {}
+      return { entries: structuredClone(initialEntries) };
+    }
+
+    function mergeSeedEntries(entries) {
+      const merged = [...entries];
+      for (const seed of initialEntries) {
+        const exists = merged.some(entry => entry.type === seed.type && entry.date === seed.date);
+        if (!exists) merged.push(structuredClone(seed));
+      }
+      return merged;
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function render() {
+      const model = buildModel();
+      renderHero(model);
+      el.avgCycle.textContent = `${model.averageCycle} gün`;
+      el.lastStart.textContent = formatDate(model.lastStart);
+      el.nextStart.textContent = `${formatDate(model.nextStart)} ±${model.margin}g`;
+      el.cycleDay.textContent = `${model.currentDay}. gün`;
+      renderToday(model);
+      renderTimeline(model);
+      renderEntries();
+    }
+
+    function renderHero(model) {
+      const profile = getPhase(model.currentDay, model.averageCycle);
+      const daysToNext = daysBetween(model.selected, model.nextStart);
+      const reading = getDailyReading(model, profile, daysToNext);
+      const mode = daysToNext <= model.margin
+        ? "yüksek"
+        : daysToNext <= 10
+          ? "hassas"
+          : model.currentDay >= 12 && model.currentDay <= 16
+            ? "açık"
+            : "dengeli";
+      el.heroPhase.textContent = `${formatDate(model.selected)} · ${profile.label}`;
+      el.heroTitle.textContent = reading.headline.replace(`${profile.label}: `, "");
+      el.heroSummary.textContent = reading.summary;
+      el.heroWatch.textContent = profile.watch;
+      el.heroCare.textContent = profile.care;
+      el.heroAvoid.textContent = profile.avoid;
+      el.heroMove.textContent = profile.move;
+      el.heroPersonal.innerHTML = `<b>Kişisel sinyal:</b> ${escapeHTML(personProfile.phaseAdvice[profile.key])}`;
+      el.heroDay.textContent = `${model.currentDay}. gün`;
+      el.heroNext.textContent = `${formatShortDate(model.nextStart)} ±${model.margin}g`;
+      el.heroMode.textContent = mode;
+    }
+
+    function buildModel() {
+      const starts = getPeriodStarts();
+      const intervals = starts.slice(1).map((date, index) => daysBetween(starts[index], date));
+      const filtered = intervals.filter(days => days >= 24 && days <= 40);
+      const averageCycle = Math.round(avg(filtered.length ? filtered : intervals));
+      const lastStart = starts[starts.length - 1];
+      let nextStart = addDays(lastStart, averageCycle);
+      const selected = parseISO(selectedDate);
+      while (nextStart < selected) nextStart = addDays(nextStart, averageCycle);
+      const activeStart = addDays(nextStart, -averageCycle);
+      const currentDay = Math.max(1, daysBetween(activeStart, selected) + 1);
+      const margin = modelMargin(filtered);
+      return { starts, intervals, filtered, averageCycle, lastStart, nextStart, activeStart, selected, currentDay, margin };
+    }
+
+    function renderToday(model) {
+      const profile = getPhase(model.currentDay, model.averageCycle);
+      const daysToNext = daysBetween(model.selected, model.nextStart);
+      const reading = getDailyReading(model, profile, daysToNext);
+      el.todayCard.innerHTML = `
+        <h3>${formatDate(model.selected)} · Günün Yorumu</h3>
+        <p><b>${reading.headline}</b></p>
+        <p>${reading.summary}</p>
+        <p><b>Kişisel sinyal:</b> ${personProfile.phaseAdvice[profile.key]}</p>
+        <div class="reading-grid">
+          <div class="reading-item watch">
+            <b>Şu an dikkat</b>
+            <span>${profile.watch}</span>
+          </div>
+          <div class="reading-item care">
+            <b>Bugün iyi gelen</b>
+            <span>${profile.care}</span>
+          </div>
+          <div class="reading-item avoid">
+            <b>Kaçın</b>
+            <span>${profile.avoid}</span>
+          </div>
+          <div class="reading-item move">
+            <b>Net hamle</b>
+            <span>${profile.move}</span>
+          </div>
+        </div>
+        <p class="technical-note"><b>Ay izi:</b> ${model.currentDay}. gün, ${profile.label}. Regl başlangıcına yaklaşık ${daysToNext} gün var. ${profile.hormone}</p>
+      `;
+    }
+
+    function buildNotification(model) {
+      const profile = getPhase(model.currentDay, model.averageCycle);
+      const daysToNext = daysBetween(model.selected, model.nextStart);
+      const reading = getDailyReading(model, profile, daysToNext);
+      return {
+        title: `Döngü Yorumu: ${profile.label}`,
+        options: {
+          body: [
+            reading.summary,
+            `Dikkat: ${profile.watch}`,
+            `İyi gelen: ${profile.care}`,
+            `Kaçın: ${profile.avoid}`,
+            `Net hamle: ${profile.move}`,
+            `Kişisel sinyal: ${personProfile.phaseAdvice[profile.key]}`
+          ].join("\n\n"),
+          icon: "./icon.svg",
+          badge: "./icon.svg",
+          tag: `daily-cycle-${toISODate(model.selected)}`,
+          renotify: true,
+          data: {
+            date: toISODate(model.selected)
+          }
+        }
+      };
+    }
+
+    function getDailyReading(model, profile, daysToNext) {
+      const angle = dailyAngles[dateSeed(model.selected) % dailyAngles.length];
+      const proximity = daysToNext <= model.margin
+        ? "Regl kapısı yakın; bugün hassasiyet hesabını biraz daha yüksek tut."
+        : daysToNext <= 10
+          ? "Regl öncesi dönem yaklaşmış olabilir; uyku, stres ve belirsizlik etkisini daha çok izlemek iyi gelir."
+          : model.currentDay >= 12 && model.currentDay <= 16
+            ? "Ovulasyon çevresi olabilir; enerji ve sosyal açıklık artabilir ama beden sinyali belirleyici."
+            : "Döngü bugün daha dengeli; kişinin temposunu merkeze almak en doğru ayar.";
+
+      return {
+        headline: `${profile.label}: ${angle}`,
+        summary: `${proximity} Ton: ${profile.tone}.`
+      };
+    }
+
+    function renderTimeline(model) {
+      const start = addDays(model.selected, -2);
+      const days = Array.from({ length: 38 }, (_, index) => addDays(start, index));
+      el.timeline.innerHTML = days.map(date => {
+        const activeStart = nearestActiveStart(date, model);
+        const dayNo = daysBetween(activeStart, date) + 1;
+        const profile = getPhase(dayNo, model.averageCycle);
+        const distance = Math.abs(daysBetween(date, model.nextStart));
+        const confidence = distance <= model.margin ? "yüksek dikkat" : distance <= model.margin + 4 ? "orta dikkat" : "normal";
+        return `
+          <div class="day">
+            <div class="date">${formatDate(date)}</div>
+            <div>
+              <span class="phase ${profile.key}"><span class="dot"></span>${profile.label} · ${dayNo}. gün</span>
+              <div class="tone">${profile.tone}. ${profile.action}</div>
+            </div>
+            <div class="confidence">${confidence}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderEntries() {
+      const sorted = [...state.entries].sort((a, b) => b.date.localeCompare(a.date));
+      el.recentEntries.innerHTML = sorted.slice(0, 6).map(entry => `
+        <div class="event">
+          <div class="event-top">
+            <b>${formatDate(parseISO(entry.date))} · ${typeLabels[entry.type]}</b>
+            <span class="tone">${entry.intensity}/5</span>
+          </div>
+          <p>${escapeHTML(entry.note || "Not yok")}</p>
+        </div>
+      `).join("");
+
+      el.dataTable.innerHTML = sorted.map(entry => `
+        <tr>
+          <td>${formatDate(parseISO(entry.date))}</td>
+          <td>${typeLabels[entry.type]}</td>
+          <td>${entry.intensity}/5</td>
+          <td>${escapeHTML(entry.note || "")}</td>
+          <td>${entry.seed ? "" : `<button data-delete="${entry.id}" class="danger">Sil</button>`}</td>
+        </tr>
+      `).join("");
+
+      el.dataTable.querySelectorAll("[data-delete]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.entries = state.entries.filter(entry => entry.id !== button.dataset.delete);
+          saveState();
+          render();
+        });
+      });
+    }
+
+    function getPeriodStarts() {
+      return state.entries
+        .filter(entry => entry.type === "period")
+        .map(entry => parseISO(entry.date))
+        .sort((a, b) => a - b);
+    }
+
+    function getPhase(day, averageCycle) {
+      let key = "follicular";
+      if (day <= 5) key = "period";
+      else if (day >= averageCycle - 10) key = "pms";
+      else if (day >= 12 && day <= 16) key = "ovulation";
+      else if (day >= 17) key = "luteal";
+      return { key, ...phaseProfiles[key] };
+    }
+
+    function nearestActiveStart(date, model) {
+      let start = model.activeStart;
+      while (addDays(start, model.averageCycle) <= date) start = addDays(start, model.averageCycle);
+      while (start > date) start = addDays(start, -model.averageCycle);
+      return start;
+    }
+
+    function modelMargin(intervals) {
+      if (intervals.length < 2) return 4;
+      const average = avg(intervals);
+      const variance = avg(intervals.map(day => Math.pow(day - average, 2)));
+      return Math.max(2, Math.min(5, Math.round(Math.sqrt(variance))));
+    }
+
+    function setView(view) {
+      document.querySelectorAll(".tab").forEach(button => button.classList.toggle("active", button.dataset.view === view));
+      document.querySelector("#dashboardView").classList.toggle("hidden", view !== "dashboard");
+      document.querySelector("#dataView").classList.toggle("hidden", view !== "data");
+      document.querySelector("#thesisView").classList.toggle("hidden", view !== "thesis");
+    }
+
+    function parseISO(value) {
+      const [year, month, day] = value.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function todayISO() {
+      const date = new Date();
+      return toISODate(date);
+    }
+
+    function toISODate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function addDays(date, days) {
+      const next = new Date(date);
+      next.setDate(next.getDate() + days);
+      return next;
+    }
+
+    function daysBetween(start, end) {
+      const a = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+      const b = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+      return Math.round((b - a) / MS_DAY);
+    }
+
+    function avg(values) {
+      return values.reduce((sum, value) => sum + value, 0) / values.length;
+    }
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short", year: "numeric" }).format(date);
+    }
+
+    function formatShortDate(date) {
+      return new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short" }).format(date);
+    }
+
+    function dateSeed(date) {
+      return date.getFullYear() * 372 + (date.getMonth() + 1) * 31 + date.getDate();
+    }
+
+    function escapeHTML(value) {
+      return value.replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    render();
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js");
+    }
+  </script>
+</body>
+</html>
