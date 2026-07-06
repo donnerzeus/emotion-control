@@ -1,4 +1,4 @@
-const CACHE_NAME = "dongu-planlayici-v3";
+const CACHE_NAME = "dongu-planlayici-v4";
 const ASSETS = [
   "./",
   "./index.html",
