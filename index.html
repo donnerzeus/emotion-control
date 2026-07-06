@@ -771,6 +771,220 @@
       display: none;
     }
 
+    .week-strip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .week-day {
+      display: grid;
+      gap: 5px;
+      justify-items: center;
+      min-height: 86px;
+      padding: 10px 7px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .075);
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .week-day.active {
+      color: #fff;
+      border-color: rgba(255, 255, 255, .34);
+      background: linear-gradient(180deg, rgba(240, 107, 159, .24), rgba(165, 110, 228, .14));
+    }
+
+    .week-day.risk-high { border-bottom: 4px solid var(--rose); }
+    .week-day.risk-medium { border-bottom: 4px solid var(--gold); }
+    .week-day.risk-low { border-bottom: 4px solid var(--aqua); }
+
+    .week-day small,
+    .week-day span {
+      font-size: 11px;
+      line-height: 1.1;
+    }
+
+    .week-day strong {
+      font-size: 18px;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .risk-panel {
+      display: grid;
+      grid-template-columns: minmax(130px, .45fr) 1fr;
+      gap: 12px;
+      align-items: stretch;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0 14px;
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .risk-score {
+      display: grid;
+      align-content: center;
+      justify-items: start;
+      gap: 5px;
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(255, 255, 255, .08);
+      border-left: 5px solid var(--aqua);
+    }
+
+    .risk-score.medium { border-left-color: var(--gold); }
+    .risk-score.high { border-left-color: var(--rose); }
+
+    .risk-score small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .risk-score strong {
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .risk-copy {
+      display: grid;
+      gap: 6px;
+      align-content: center;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .risk-copy b {
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .checkin-panel {
+      display: grid;
+      gap: 14px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 14px;
+      background: rgba(255, 255, 255, .075);
+    }
+
+    .checkin-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .checkin-head b {
+      display: block;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .checkin-head span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .checkin-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .score-field {
+      display: grid;
+      gap: 7px;
+      padding: 9px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .score-field label {
+      font-size: 12px;
+      color: #fff;
+    }
+
+    .score-field input {
+      padding: 0;
+      min-height: auto;
+      accent-color: var(--rose);
+    }
+
+    .score-field output {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .choice-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .segmented {
+      display: flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .segmented button {
+      flex: 1;
+      min-height: 34px;
+      padding: 6px 8px;
+      font-size: 12px;
+      color: var(--muted);
+      border: 0;
+      background: transparent;
+    }
+
+    .segmented button.active {
+      color: #fff;
+      background: rgba(255, 255, 255, .16);
+    }
+
+    .checkin-list {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .checkin-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: start;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      padding: 10px;
+      background: rgba(255, 255, 255, .07);
+    }
+
+    .checkin-item b {
+      display: block;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .checkin-item span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
     @media (max-width: 860px) {
       .topbar-inner {
         align-items: stretch;
@@ -880,22 +1094,23 @@
         z-index: 5;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 5px;
-        padding: 6px;
-        border: 1px solid rgba(255, 255, 255, .2);
-        border-radius: 18px;
-        background: rgba(25, 8, 36, .82);
-        backdrop-filter: blur(20px);
-        box-shadow: 0 18px 44px rgba(3, 0, 12, .42);
+        gap: 4px;
+        padding: 7px;
+        border: 1px solid rgba(255, 255, 255, .22);
+        border-radius: 24px;
+        background:
+          linear-gradient(180deg, rgba(65, 25, 86, .78), rgba(18, 5, 28, .9));
+        backdrop-filter: blur(24px) saturate(1.3);
+        box-shadow: 0 20px 54px rgba(3, 0, 12, .54), inset 0 1px 0 rgba(255, 255, 255, .1);
       }
 
       .bottom-nav .tab {
         display: grid;
         justify-items: center;
-        gap: 3px;
-        min-height: 50px;
+        gap: 4px;
+        min-height: 52px;
         padding: 6px 4px;
-        border-radius: 14px;
+        border-radius: 18px;
         color: rgba(255, 248, 255, .68);
       }
 
@@ -907,8 +1122,9 @@
       .bottom-nav .tab.active {
         color: #fff;
         background:
-          linear-gradient(180deg, rgba(240, 107, 159, .28), rgba(165, 110, 228, .18));
+          linear-gradient(180deg, rgba(240, 107, 159, .34), rgba(165, 110, 228, .22));
         border: 1px solid rgba(255, 255, 255, .16);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16);
       }
 
       .nav-icon {
@@ -922,8 +1138,7 @@
       }
 
       .hero {
-        gap: 10px;
-        margin-bottom: 10px;
+        display: none;
       }
 
       .hero-card {
@@ -1012,6 +1227,53 @@
         gap: 10px;
       }
 
+      .week-strip {
+        display: flex;
+        gap: 7px;
+        overflow-x: auto;
+        margin: 0 -12px 11px;
+        padding: 0 12px 2px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .week-day {
+        flex: 0 0 58px;
+        min-height: 75px;
+        padding: 8px 6px;
+        border-radius: 14px;
+        scroll-snap-align: start;
+      }
+
+      .week-day small,
+      .week-day span {
+        font-size: 10px;
+      }
+
+      .week-day strong {
+        font-size: 17px;
+      }
+
+      .risk-panel {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 10px;
+        margin: 8px 0 10px;
+      }
+
+      .risk-score {
+        min-height: 0;
+        padding: 10px;
+      }
+
+      .risk-score strong {
+        font-size: 20px;
+      }
+
+      .risk-copy {
+        font-size: 12px;
+      }
+
       #dashboardView > aside.section {
         display: none;
       }
@@ -1096,7 +1358,7 @@
       }
 
       .metrics {
-        order: 2;
+        order: 3;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 7px;
         margin-bottom: 10px;
@@ -1119,11 +1381,11 @@
       }
 
       .timeline {
-        order: 3;
+        order: 2;
         gap: 7px;
       }
 
-      .timeline .day:nth-child(n+8) {
+      .timeline .day {
         display: none;
       }
 
@@ -1154,6 +1416,41 @@
 
       .inline {
         grid-template-columns: 1fr;
+      }
+
+      .checkin-panel {
+        padding: 12px;
+      }
+
+      .checkin-head {
+        flex-direction: column;
+      }
+
+      .checkin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .score-field {
+        grid-template-columns: 92px 1fr 42px;
+        align-items: center;
+      }
+
+      .score-field label {
+        margin: 0;
+      }
+
+      .choice-row {
+        grid-template-columns: 1fr;
+      }
+
+      .checkin-item {
+        grid-template-columns: 1fr;
+      }
+
+      #dataView table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
       }
     }
   </style>
@@ -1279,6 +1576,8 @@
             </div>
           </div>
           <div class="section-body">
+            <div class="week-strip" id="weekStrip" aria-label="Haftalık döngü görünümü"></div>
+
             <div class="metrics">
               <div class="metric">
                 <small>Ortalama döngü</small>
@@ -1299,6 +1598,8 @@
             </div>
 
             <article class="today" id="todayCard"></article>
+
+            <article class="risk-panel" id="riskPanel"></article>
 
             <div class="timeline" id="timeline"></div>
           </div>
@@ -1362,6 +1663,44 @@
           <h2>Kayıtlı Veriler</h2>
         </div>
         <div class="section-body">
+          <form id="checkinForm" class="checkin-panel">
+            <div class="checkin-head">
+              <div>
+                <b>Günlük check-in</b>
+                <span>Bu 5 alan karar motorunun tonu yumuşak şekilde ayarlamasına yardım eder.</span>
+              </div>
+              <label>
+                Tarih
+                <input id="checkinDate" type="date" required>
+              </label>
+            </div>
+            <div class="checkin-grid" id="checkinFields"></div>
+            <div class="choice-row">
+              <label>
+                Tahmin
+                <div class="segmented" data-choice="prediction">
+                  <button type="button" data-value="right">Doğruydu</button>
+                  <button type="button" data-value="wrong">Değildi</button>
+                </div>
+              </label>
+              <label>
+                Tavsiye
+                <div class="segmented" data-choice="advice">
+                  <button type="button" data-value="helped">İşe yaradı</button>
+                  <button type="button" data-value="missed">Yaramadı</button>
+                </div>
+              </label>
+            </div>
+            <label>
+              Kısa not
+              <textarea id="checkinNote" placeholder="Bugün ne işe yaradı, ne ters tepti?"></textarea>
+            </label>
+            <div class="actions">
+              <button class="primary" type="submit">Check-in kaydet</button>
+              <button type="button" id="clearCheckinBtn">Bugünü temizle</button>
+            </div>
+          </form>
+          <div class="checkin-list" id="checkinList"></div>
           <table>
             <thead>
               <tr>
@@ -1537,8 +1876,17 @@
       event: "Önemli olay"
     };
 
+    const checkinFields = [
+      { key: "mood", label: "Duygu", low: "zor", high: "iyi" },
+      { key: "energy", label: "Enerji", low: "düşük", high: "yüksek" },
+      { key: "body", label: "Ağrı/beden", low: "rahat", high: "zor" },
+      { key: "stress", label: "Stres", low: "az", high: "çok" },
+      { key: "communication", label: "İletişim", low: "zor", high: "uyumlu" }
+    ];
+
     let state = loadState();
     let selectedDate = todayISO();
+    let checkinDraft = { prediction: "", advice: "" };
 
     const el = {
       heroPhase: document.querySelector("#heroPhase"),
@@ -1557,6 +1905,8 @@
       nextStart: document.querySelector("#nextStart"),
       cycleDay: document.querySelector("#cycleDay"),
       todayCard: document.querySelector("#todayCard"),
+      weekStrip: document.querySelector("#weekStrip"),
+      riskPanel: document.querySelector("#riskPanel"),
       timeline: document.querySelector("#timeline"),
       notifyBtn: document.querySelector("#notifyBtn"),
       entryForm: document.querySelector("#entryForm"),
@@ -1567,6 +1917,12 @@
       recentEntries: document.querySelector("#recentEntries"),
       profileSignals: document.querySelector("#profileSignals"),
       dataTable: document.querySelector("#dataTable"),
+      checkinForm: document.querySelector("#checkinForm"),
+      checkinDate: document.querySelector("#checkinDate"),
+      checkinFields: document.querySelector("#checkinFields"),
+      checkinNote: document.querySelector("#checkinNote"),
+      checkinList: document.querySelector("#checkinList"),
+      clearCheckinBtn: document.querySelector("#clearCheckinBtn"),
       useTodayBtn: document.querySelector("#useTodayBtn"),
       exportBtn: document.querySelector("#exportBtn"),
       importBtn: document.querySelector("#importBtn"),
@@ -1575,9 +1931,11 @@
     };
 
     el.entryDate.value = selectedDate;
+    el.checkinDate.value = selectedDate;
     el.profileSignals.innerHTML = personProfile.signals
       .map(signal => `<li>${escapeHTML(signal)}</li>`)
       .join("");
+    renderCheckinForm();
 
     document.querySelectorAll(".tab").forEach(button => {
       button.addEventListener("click", () => setView(button.dataset.view));
@@ -1598,9 +1956,49 @@
       render();
     });
 
+    el.checkinDate.addEventListener("change", () => {
+      selectedDate = el.checkinDate.value || todayISO();
+      el.entryDate.value = selectedDate;
+      render();
+    });
+
+    el.checkinForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const date = el.checkinDate.value || selectedDate;
+      const scores = Object.fromEntries(checkinFields.map(field => {
+        const input = el.checkinForm.querySelector(`[name="checkin-${field.key}"]`);
+        return [field.key, Number(input.value)];
+      }));
+      const next = {
+        id: `checkin-${date}`,
+        date,
+        scores,
+        prediction: checkinDraft.prediction,
+        advice: checkinDraft.advice,
+        note: el.checkinNote.value.trim(),
+        updatedAt: new Date().toISOString()
+      };
+      state.checkins = state.checkins.filter(checkin => checkin.date !== date);
+      state.checkins.push(next);
+      selectedDate = date;
+      el.entryDate.value = date;
+      saveState();
+      render();
+      setView("dashboard");
+    });
+
+    el.clearCheckinBtn.addEventListener("click", () => {
+      const date = el.checkinDate.value || selectedDate;
+      state.checkins = state.checkins.filter(checkin => checkin.date !== date);
+      checkinDraft = { prediction: "", advice: "" };
+      saveState();
+      render();
+    });
+
     el.useTodayBtn.addEventListener("click", () => {
       selectedDate = todayISO();
       el.entryDate.value = selectedDate;
+      el.checkinDate.value = selectedDate;
       render();
     });
 
@@ -1638,7 +2036,7 @@
       if (!file) return;
       const next = JSON.parse(await file.text());
       if (!Array.isArray(next.entries)) return alert("Dosya biçimi geçerli değil.");
-      state = next;
+      state = normalizeState(next);
       saveState();
       render();
       el.importFile.value = "";
@@ -1646,19 +2044,44 @@
 
     el.resetBtn.addEventListener("click", () => {
       if (!confirm("Eklediğin veriler silinsin ve başlangıç verisine dönülsün mü?")) return;
-      state = { entries: structuredClone(initialEntries) };
+      state = { entries: structuredClone(initialEntries), checkins: [] };
       saveState();
       render();
     });
 
     function loadState() {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { entries: structuredClone(initialEntries) };
+      if (!raw) return { entries: structuredClone(initialEntries), checkins: [] };
       try {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed.entries)) return { entries: mergeSeedEntries(parsed.entries) };
+        if (Array.isArray(parsed.entries)) return normalizeState(parsed);
       } catch {}
-      return { entries: structuredClone(initialEntries) };
+      return { entries: structuredClone(initialEntries), checkins: [] };
+    }
+
+    function normalizeState(next) {
+      return {
+        entries: mergeSeedEntries(Array.isArray(next.entries) ? next.entries : []),
+        checkins: Array.isArray(next.checkins) ? next.checkins.map(normalizeCheckin).filter(Boolean) : []
+      };
+    }
+
+    function normalizeCheckin(checkin) {
+      if (!checkin || !checkin.date) return null;
+      const scores = {};
+      for (const field of checkinFields) {
+        const value = Number(checkin.scores?.[field.key] ?? 3);
+        scores[field.key] = Math.max(1, Math.min(5, Math.round(value)));
+      }
+      return {
+        id: checkin.id || `checkin-${checkin.date}`,
+        date: checkin.date,
+        scores,
+        prediction: ["right", "wrong"].includes(checkin.prediction) ? checkin.prediction : "",
+        advice: ["helped", "missed"].includes(checkin.advice) ? checkin.advice : "",
+        note: String(checkin.note || ""),
+        updatedAt: checkin.updatedAt || ""
+      };
     }
 
     function mergeSeedEntries(entries) {
@@ -1677,6 +2100,7 @@
     function render() {
       const model = buildModel();
       renderHero(model);
+      renderWeekStrip(model);
       el.avgCycle.textContent = `${model.averageCycle} gün`;
       el.lastStart.textContent = formatDate(model.lastStart);
       el.nextStart.textContent = `${formatDate(model.nextStart)} ±${model.margin}g`;
@@ -1684,19 +2108,15 @@
       renderToday(model);
       renderTimeline(model);
       renderEntries();
+      renderCheckinForm();
     }
 
     function renderHero(model) {
       const profile = getPhase(model.currentDay, model.averageCycle);
       const daysToNext = daysBetween(model.selected, model.nextStart);
-      const reading = getDailyReading(model, profile, daysToNext);
-      const mode = daysToNext <= model.margin
-        ? "yüksek"
-        : daysToNext <= 10
-          ? "hassas"
-          : model.currentDay >= 12 && model.currentDay <= 16
-            ? "açık"
-            : "dengeli";
+      const adjustment = calculatePersonalAdjustment(model, profile);
+      const risk = buildRiskLevel(profile, adjustment, daysToNext, model.margin);
+      const reading = getDailyReading(model, profile, daysToNext, adjustment, risk);
       el.heroPhase.textContent = `${formatDate(model.selected)} · ${profile.label}`;
       el.heroTitle.textContent = reading.headline.replace(`${profile.label}: `, "");
       el.heroSummary.textContent = reading.summary;
@@ -1707,17 +2127,21 @@
       el.heroPersonal.innerHTML = `<b>Sana özel pusula:</b> ${escapeHTML(personProfile.phaseAdvice[profile.key])}`;
       el.heroDay.textContent = `${model.currentDay}. gün`;
       el.heroNext.textContent = `${formatShortDate(model.nextStart)} ±${model.margin}g`;
-      el.heroMode.textContent = mode;
+      el.heroMode.textContent = risk.label.toLowerCase();
     }
 
     function buildModel() {
+      return buildModelForDate(parseISO(selectedDate));
+    }
+
+    function buildModelForDate(date) {
       const starts = getPeriodStarts();
       const intervals = starts.slice(1).map((date, index) => daysBetween(starts[index], date));
       const filtered = intervals.filter(days => days >= 24 && days <= 40);
       const averageCycle = Math.round(avg(filtered.length ? filtered : intervals));
       const lastStart = starts[starts.length - 1];
       let nextStart = addDays(lastStart, averageCycle);
-      const selected = parseISO(selectedDate);
+      const selected = parseISO(toISODate(date));
       while (nextStart < selected) nextStart = addDays(nextStart, averageCycle);
       const activeStart = addDays(nextStart, -averageCycle);
       const currentDay = Math.max(1, daysBetween(activeStart, selected) + 1);
@@ -1728,7 +2152,9 @@
     function renderToday(model) {
       const profile = getPhase(model.currentDay, model.averageCycle);
       const daysToNext = daysBetween(model.selected, model.nextStart);
-      const reading = getDailyReading(model, profile, daysToNext);
+      const adjustment = calculatePersonalAdjustment(model, profile);
+      const risk = buildRiskLevel(profile, adjustment, daysToNext, model.margin);
+      const reading = getDailyReading(model, profile, daysToNext, adjustment, risk);
       el.todayCard.innerHTML = `
         <h3>${formatDate(model.selected)} · Bugünkü Davranış Pusulan</h3>
         <p><b>${reading.headline}</b></p>
@@ -1754,17 +2180,32 @@
         </div>
         <p class="technical-note"><b>Ay izi:</b> ${model.currentDay}. gün, ${profile.label}. Regl başlangıcına yaklaşık ${daysToNext} gün var. ${profile.hormone}</p>
       `;
+      el.riskPanel.innerHTML = `
+        <div class="risk-score ${risk.key}">
+          <small>Yaklaşan risk</small>
+          <strong>${risk.label}</strong>
+          <small>${risk.score}/10 · ${risk.confidence}</small>
+        </div>
+        <div class="risk-copy">
+          <b>${risk.mode}</b>
+          <span>${risk.reason}</span>
+          <span>${adjustment.source}</span>
+        </div>
+      `;
     }
 
     function buildNotification(model) {
       const profile = getPhase(model.currentDay, model.averageCycle);
       const daysToNext = daysBetween(model.selected, model.nextStart);
-      const reading = getDailyReading(model, profile, daysToNext);
+      const adjustment = calculatePersonalAdjustment(model, profile);
+      const risk = buildRiskLevel(profile, adjustment, daysToNext, model.margin);
+      const reading = getDailyReading(model, profile, daysToNext, adjustment, risk);
       return {
         title: `Döngü Yorumu: ${profile.label}`,
         options: {
           body: [
             reading.summary,
+            `Risk: ${risk.label} - ${risk.mode}`,
             `Dikkat et: ${profile.watch}`,
             `Yap: ${profile.care}`,
             `Yapma: ${profile.avoid}`,
@@ -1782,7 +2223,7 @@
       };
     }
 
-    function getDailyReading(model, profile, daysToNext) {
+    function getDailyReading(model, profile, daysToNext, adjustment, risk) {
       const angle = dailyAngles[dateSeed(model.selected) % dailyAngles.length];
       const proximity = daysToNext <= model.margin
         ? "Regl kapısı yakın; bugün tempoyu düşür, belirsizliği azalt, tartışma başlatma."
@@ -1791,11 +2232,110 @@
           : model.currentDay >= 12 && model.currentDay <= 16
             ? "Ovulasyon çevresi olabilir; teklifini davet gibi kur, beklentiye çevirme."
             : "Döngü bugün daha dengeli; yine de planı seçenekli ve yumuşak tut.";
+      const personal = adjustment.count
+        ? ` Son check-in verileri tonu ${risk.mode.toLocaleLowerCase("tr-TR")} tarafına çekiyor.`
+        : " Check-in verisi geldikçe bu yorum kişiselleşecek.";
 
       return {
         headline: `${profile.label}: ${angle}`,
-        summary: `${proximity} Ton: ${profile.tone}.`
+        summary: `${proximity} Risk ${risk.label.toLocaleLowerCase("tr-TR")}. ${personal} Ton: ${profile.tone}.`
       };
+    }
+
+    function renderWeekStrip(model) {
+      const start = addDays(model.selected, -3);
+      const days = Array.from({ length: 7 }, (_, index) => addDays(start, index));
+      el.weekStrip.innerHTML = days.map(date => {
+        const modelForDate = buildModelForDate(date);
+        const profile = getPhase(modelForDate.currentDay, modelForDate.averageCycle);
+        const daysToNext = daysBetween(date, modelForDate.nextStart);
+        const adjustment = calculatePersonalAdjustment(modelForDate, profile);
+        const risk = buildRiskLevel(profile, adjustment, daysToNext, modelForDate.margin);
+        const isActive = toISODate(date) === toISODate(model.selected);
+        return `
+          <button class="week-day ${isActive ? "active" : ""} risk-${risk.key}" type="button" data-date="${toISODate(date)}">
+            <small>${weekdayShort(date)}</small>
+            <strong>${date.getDate()}</strong>
+            <span>${profile.label.split(" ")[0]}</span>
+            <small>${risk.label}</small>
+          </button>
+        `;
+      }).join("");
+
+      el.weekStrip.querySelectorAll("[data-date]").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedDate = button.dataset.date;
+          el.entryDate.value = selectedDate;
+          el.checkinDate.value = selectedDate;
+          render();
+        });
+      });
+    }
+
+    function getCheckinsForWindow(date, phaseKey) {
+      const current = parseISO(toISODate(date));
+      return state.checkins
+        .filter(checkin => {
+          const checkDate = parseISO(checkin.date);
+          const age = daysBetween(checkDate, current);
+          if (age < 0 || age > 70) return false;
+          const model = buildModelForDate(checkDate);
+          const profile = getPhase(model.currentDay, model.averageCycle);
+          return profile.key === phaseKey || Math.abs(age) <= 4;
+        })
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 12);
+    }
+
+    function calculatePersonalAdjustment(model, profile) {
+      const checkins = getCheckinsForWindow(model.selected, profile.key);
+      if (!checkins.length) {
+        return { score: 0, count: 0, confidence: "veri yok", source: "Henüz check-in yok; faz tahmini ana kaynak." };
+      }
+
+      let total = 0;
+      let weightTotal = 0;
+      for (const checkin of checkins) {
+        const age = Math.max(0, daysBetween(parseISO(checkin.date), model.selected));
+        const weight = Math.max(.35, 1 - age / 70);
+        const s = checkin.scores;
+        const stress = s.stress - 3;
+        const lowEnergy = 3 - s.energy;
+        const body = s.body - 3;
+        const lowMood = 3 - s.mood;
+        const communication = 3 - s.communication;
+        const correction = (checkin.prediction === "wrong" ? .45 : 0) + (checkin.advice === "missed" ? .35 : 0) - (checkin.advice === "helped" ? .2 : 0);
+        total += (stress * .55 + lowEnergy * .42 + body * .38 + lowMood * .34 + communication * .46 + correction) * weight;
+        weightTotal += weight;
+      }
+
+      const score = total / weightTotal;
+      const source = `${checkins.length} check-in aynı faz/son dönem tonunu ayarlıyor.`;
+      return {
+        score,
+        count: checkins.length,
+        confidence: checkins.length >= 5 ? "orta güven" : "düşük güven",
+        source
+      };
+    }
+
+    function buildRiskLevel(profile, adjustment, daysToNext, margin) {
+      const base = profile.key === "period" ? 6.2
+        : profile.key === "pms" ? 6.8
+          : profile.key === "luteal" ? 5.2
+            : profile.key === "ovulation" ? 3.8
+              : 3.2;
+      const proximity = daysToNext <= margin ? 1.7 : daysToNext <= 10 ? 1 : 0;
+      const score = Math.max(1, Math.min(10, Math.round(base + proximity + adjustment.score)));
+      const key = score >= 7 ? "high" : score >= 5 ? "medium" : "low";
+      const label = key === "high" ? "Yüksek" : key === "medium" ? "Orta" : "Düşük";
+      const mode = key === "high" ? "Bugün daha sakin ol" : key === "medium" ? "Bugün daha net ol" : "Bugün daha rahat ilerle";
+      const reason = key === "high"
+        ? "Geç cevap, belirsizlik ve sert ton riskini özellikle azalt."
+        : key === "medium"
+          ? "Planı seçenekli kur; son dakika değişikliklerini önceden yumuşat."
+          : "Ana risk düşük; yine de beklentiyi baskıya çevirmeden ilerle.";
+      return { key, label, mode, reason, score, confidence: adjustment.confidence };
     }
 
     function renderTimeline(model) {
@@ -1820,8 +2360,74 @@
       }).join("");
     }
 
+    function renderCheckinForm() {
+      const existing = state.checkins.find(checkin => checkin.date === selectedDate);
+      el.checkinDate.value = selectedDate;
+      checkinDraft = {
+        prediction: existing?.prediction || "",
+        advice: existing?.advice || ""
+      };
+      el.checkinFields.innerHTML = checkinFields.map(field => {
+        const value = existing?.scores?.[field.key] ?? 3;
+        return `
+          <div class="score-field">
+            <label for="checkin-${field.key}">${field.label}</label>
+            <input id="checkin-${field.key}" name="checkin-${field.key}" type="range" min="1" max="5" value="${value}">
+            <output>${value}/5</output>
+          </div>
+        `;
+      }).join("");
+      el.checkinNote.value = existing?.note || "";
+
+      el.checkinFields.querySelectorAll("input[type='range']").forEach(input => {
+        input.addEventListener("input", () => {
+          input.closest(".score-field").querySelector("output").textContent = `${input.value}/5`;
+        });
+      });
+
+      document.querySelectorAll("[data-choice]").forEach(group => {
+        const key = group.dataset.choice;
+        group.querySelectorAll("button").forEach(button => {
+          button.classList.toggle("active", checkinDraft[key] === button.dataset.value);
+          button.onclick = () => {
+            checkinDraft[key] = checkinDraft[key] === button.dataset.value ? "" : button.dataset.value;
+            group.querySelectorAll("button").forEach(next => {
+              next.classList.toggle("active", checkinDraft[key] === next.dataset.value);
+            });
+          };
+        });
+      });
+    }
+
     function renderEntries() {
       const sorted = [...state.entries].sort((a, b) => b.date.localeCompare(a.date));
+      const checkins = [...state.checkins].sort((a, b) => b.date.localeCompare(a.date));
+      el.checkinList.innerHTML = checkins.slice(0, 8).map(checkin => {
+        const values = checkinFields.map(field => `${field.label}: ${checkin.scores[field.key]}/5`).join(" · ");
+        const verdicts = [
+          checkin.prediction === "right" ? "tahmin doğru" : checkin.prediction === "wrong" ? "tahmin sapmış" : "",
+          checkin.advice === "helped" ? "tavsiye işe yaradı" : checkin.advice === "missed" ? "tavsiye yaramadı" : ""
+        ].filter(Boolean).join(" · ");
+        return `
+          <div class="checkin-item">
+            <div>
+              <b>${formatDate(parseISO(checkin.date))}</b>
+              <span>${values}${verdicts ? ` · ${verdicts}` : ""}</span>
+              ${checkin.note ? `<span>${escapeHTML(checkin.note)}</span>` : ""}
+            </div>
+            <button type="button" class="danger" data-checkin-delete="${checkin.date}">Sil</button>
+          </div>
+        `;
+      }).join("");
+
+      el.checkinList.querySelectorAll("[data-checkin-delete]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.checkins = state.checkins.filter(checkin => checkin.date !== button.dataset.checkinDelete);
+          saveState();
+          render();
+        });
+      });
+
       el.recentEntries.innerHTML = sorted.slice(0, 6).map(entry => `
         <div class="event">
           <div class="event-top">
@@ -1927,6 +2533,10 @@
 
     function formatShortDate(date) {
       return new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short" }).format(date);
+    }
+
+    function weekdayShort(date) {
+      return new Intl.DateTimeFormat("tr-TR", { weekday: "short" }).format(date);
     }
 
     function dateSeed(date) {

@@ -1,4 +1,4 @@
-const CACHE_NAME = "dongu-planlayici-v5";
+const CACHE_NAME = "dongu-planlayici-v6";
 const ASSETS = [
   "./",
   "./index.html",
@@ -47,7 +47,7 @@ self.addEventListener("notificationclick", event => {
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(clients => {
       const existing = clients.find(client => "focus" in client);
       if (existing) return existing.focus();
-      if (self.clients.openWindow) return self.clients.openWindow("./");
+      if (self.clients.openWindow) return self.clients.openWindow("./?pwa=v6");
       return undefined;
     })
   );
