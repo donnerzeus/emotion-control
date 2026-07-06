@@ -2,7 +2,7 @@
   "name": "Döngü Planlayıcı",
   "short_name": "Döngü",
   "description": "Döngü verisine göre günlük dikkat, yaklaşım ve bakım notları.",
-  "start_url": "./?pwa=v4",
+  "start_url": "./?pwa=v5",
   "scope": "./",
   "display": "standalone",
   "background_color": "#16071f",

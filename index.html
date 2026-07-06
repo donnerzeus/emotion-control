@@ -2,12 +2,12 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Döngü Planlayıcı</title>
   <meta name="theme-color" content="#16071f">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Döngü">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icon.svg">
@@ -55,6 +55,7 @@
         linear-gradient(180deg, #14051d 0%, #241033 38%, #180920 100%);
       color: var(--ink);
       min-height: 100vh;
+      min-height: 100dvh;
     }
 
     button, input, select, textarea {
@@ -169,6 +170,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+    }
+
+    @supports (padding-top: env(safe-area-inset-top)) {
+      .topbar-inner {
+        padding-top: calc(14px + env(safe-area-inset-top));
+      }
     }
 
     .brand {
@@ -835,6 +842,12 @@
       .topbar-inner {
         padding: 10px 12px 8px;
         gap: 9px;
+      }
+
+      @supports (padding-top: env(safe-area-inset-top)) {
+        .topbar-inner {
+          padding-top: calc(10px + env(safe-area-inset-top));
+        }
       }
 
       h1 {
